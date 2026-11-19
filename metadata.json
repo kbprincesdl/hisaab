@@ -1,0 +1,6 @@
+{
+  "name": "Hisaab",
+  "description": "Simple digital kirana ledger with customer balances, payment screenshots, and one-tap WhatsApp reminders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
