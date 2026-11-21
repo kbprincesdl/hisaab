@@ -12,7 +12,7 @@ import {
 
 export const STORAGE_KEY = 'hisaab_ledger_v1';
 export const LANG_STORAGE_KEY = 'hisaab_lang_v1';
-export const DEFAULT_SHOP_NAME = 'My Kirana Store';
+export const DEFAULT_SHOP_NAME = 'Lakshmi Provision Store';
 export const DEFAULT_UPI_ID = 'kirana@upi';
 export const DEFAULT_CREDIT_DAYS = 30;
 export const MAX_IMPORT_BYTES = 10 * 1024 * 1024;
@@ -174,7 +174,7 @@ export function buildWhatsAppLink(
   lang: Language
 ): string {
   const due = Math.max(0, roundMoney(balance));
-  const cleanShop = shopName.trim() || 'Hisaab Store';
+  const cleanShop = shopName.trim() || DEFAULT_SHOP_NAME;
   const upi = due > 0 ? buildUpiLink(upiId, cleanShop, due) : '';
 
   let message: string;
@@ -405,6 +405,14 @@ export function createReminderId(): string {
   return `r_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
+export function normalizeShopName(value: string): string {
+  const cleaned = value.replace(/\s*\(fictional\)\s*$/i, '').trim();
+  if (!cleaned || cleaned === 'My Kirana Store' || cleaned === 'Hisaab Store') {
+    return DEFAULT_SHOP_NAME;
+  }
+  return cleaned;
+}
+
 export function createDefaultShopData(): ShopData {
   return {
     shop: DEFAULT_SHOP_NAME,
@@ -446,9 +454,10 @@ export function normalizeStoredData(raw: unknown, fallback?: Partial<ShopData>):
   }
 
   const parsed = raw as Record<string, unknown>;
-  const shop = typeof parsed.shop === 'string' && parsed.shop.trim()
+  const rawShop = typeof parsed.shop === 'string' && parsed.shop.trim()
     ? parsed.shop.trim().slice(0, 80)
     : fallback?.shop ?? base.shop;
+  const shop = normalizeShopName(rawShop);
   const upiId = typeof parsed.upiId === 'string' && parsed.upiId.trim()
     ? parsed.upiId.trim().slice(0, 120)
     : fallback?.upiId ?? deriveDefaultUpi(shop);
@@ -606,9 +615,11 @@ export function parseImportJsonStrict(
   }
 
   const errors: ImportIssue[] = [];
-  const shop = typeof rec.shop === 'string' && rec.shop.trim()
-    ? rec.shop.trim().slice(0, 80)
-    : current?.shop ?? DEFAULT_SHOP_NAME;
+  const shop = normalizeShopName(
+    typeof rec.shop === 'string' && rec.shop.trim()
+      ? rec.shop.trim().slice(0, 80)
+      : current?.shop ?? DEFAULT_SHOP_NAME
+  );
   const upiId = typeof rec.upiId === 'string' && rec.upiId.trim()
     ? rec.upiId.trim().slice(0, 120)
     : current?.upiId ?? deriveDefaultUpi(shop);
@@ -905,7 +916,7 @@ export function mergeShopData(local: ShopData, remote: ShopData): ShopData {
 }
 
 const SAMPLE_SHOP_BASE = {
-  shop: 'Lakshmi Provision Store (fictional)',
+  shop: 'Lakshmi Provision Store',
   upiId: 'lakshmi@upi',
   creditDays: 30,
   reminders: [],

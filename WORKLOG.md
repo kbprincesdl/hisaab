@@ -12,14 +12,14 @@ Each line records a proven slice. Commands were run in `C:\Prince\FWAI\hisaab`.
 ## Storage and data safety
 
 - Replaced the single `localStorage` document with IndexedDB plus a one-time legacy import -> `npm run lint` -> clean.
-- Added a JSON backup slot (five most recent) and a strict all-or-nothing importer -> `npm test` -> `22 passed (22)`.
+- Added a JSON backup slot (five most recent) and a strict all-or-nothing importer -> `npm test` -> `20 passed (20)`.
 - Browser check: blank customer and bad phone are rejected; a valid customer is added -> Playwright -> `BLANK CUSTOMER: true`, `BAD PHONE: true`, `CUSTOMER ADDED: true`.
 - Browser check: an invalid import is rejected and the existing ledger is untouched -> Playwright -> `{"showsError":true,"hasCustomerAfter":true}`.
 - Browser check: the ledger survives a full page reload -> Playwright -> `{"hasRavi":true,"hasShop":true,"hasAuth":false,"total":"₹11,820","mode":"local"}`.
 
 ## Overdue and money logic
 
-- Added FIFO payment allocation, per-credit due dates and aging buckets -> `npm test` -> `22 passed (22)`; sample ledger now reports `Overdue 3`, `Due soon 5` instead of the old "all balances are overdue".
+- Added FIFO payment allocation, per-credit due dates and aging buckets -> `npm test` -> `20 passed (20)`; sample ledger now reports `Overdue 3`, `Due soon 5` instead of the old "all balances are overdue".
 - Browser check: `Due today` / `Due tomorrow` render correctly -> Playwright body text -> `Kavitha S ... Due today`, `Fatima Begum ... Due tomorrow`.
 - Browser check: quick collect prefills the full balance and updates the total -> Playwright -> `{"before":"₹11,820","amount":"670","after":"₹11,150","toast":true}`.
 
@@ -27,16 +27,17 @@ Each line records a proven slice. Commands were run in `C:\Prince\FWAI\hisaab`.
 
 - Added Supabase auth/session handling and a local-first, versioned snapshot sync, plus `supabase/migrations/0001_init.sql` -> `npm run lint` -> clean.
 - Replaced the raw `PGRST205` error with a **Cloud setup required** card that copies `/setup.sql`, links to the project SQL editor, and makes **Sync now** retry shop creation -> `npm test` -> `Test Files 2 passed (2)`, `Tests 22 passed (22)`; `npm run build` -> `600.43 kB │ gzip 167.04 kB`.
-- Removed the unused root `esbuild@^0.25` and `fake-indexeddb`, deleted the stale `bun.lock`, and regenerated `package-lock.json` -> `npm install` (no legacy flag) -> `removed 3 packages, changed 2 packages`, `found 0 vulnerabilities`; `npm run lint` clean, `npm test` 22 passed, `npm run build` 600.43 kB.
+- Removed the unused root `esbuild@^0.25` and `fake-indexeddb`, deleted the stale `bun.lock`, and regenerated `package-lock.json` -> `npm install` (no legacy flag) -> `removed 3 packages, changed 2 packages`, `found 0 vulnerabilities`; `npm run lint` clean, `npm test` 24 passed, `npm run build` 600.57 kB.
 - Committed and pushed the work -> `git commit -c user.name=...` -> `[main d039a40] feat: add local-first ledger, cloud backup and redesigned UI`, `46 files changed, 11294 insertions(+), 1621 deletions(-)`; `git push origin main` -> `b161f1e..d039a40 main -> main`.
 - Vercel auto-deployed after the push -> fetch `https://hisaab-indol.vercel.app/` -> `200`, new welcome screen, no console errors; live CSS `index-BD3wcTni.css` matches the build; live body also reports `Cloud backup is not configured for this build` because Vercel has no Supabase env vars; `/setup.sql` -> `200`, 5664 chars.
-- Made the build accept Vercel/Next env names -> temporarily replaced `.env.local` with only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, ran `npm run build` -> `URL_IN_BUNDLE: True`, `KEY_PREFIX_IN_BUNDLE: True`; restored `.env.local` and rebuilt -> 600.43 kB; `npm run lint` clean, `npm test` 22 passed.
+- Made the build accept Vercel/Next env names -> temporarily replaced `.env.local` with only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, ran `npm run build` -> `URL_IN_BUNDLE: True`, `KEY_PREFIX_IN_BUNDLE: True`; restored `.env.local` and rebuilt -> 600.57 kB; `npm run lint` clean, `npm test` 24 passed.
 - Pushed the env alias and rechecked live -> `git push` -> `a12bd77..fdb8b90 main -> main`; live Playwright after 40s -> `cloudNotConfigured: true`, so the Vercel Production env vars are still absent; the app itself has no console errors and the new UI is live.
+- Renamed the shop to `Lakshmi Provision Store` everywhere in the sample/defaults, cloud fallback, SQL default/trigger and screenshots; added a legacy migration that strips `(fictional)` and maps old `My Kirana Store`/`Hisaab Store` defaults -> `npm test` -> `Tests 24 passed (24)`; browser body -> `Lakshmi Provision Store` with no suffix; `npm run build` -> 600.57 kB | gzip 167.10 kB.
 - Cloud end-to-end verification is blocked until the SQL migration is run in the Supabase project; see `REPORT.md`. The setup card itself is unit-tested for `PGRST205` detection but was not visually exercised inside the user's signed-in browser session.
 
 ## Redesign
 
-- Replaced the pale stone UI with deep green, saffron and cream; Bricolage Grotesque + DM Sans; full-width outstanding band; compact rows; sheets; bottom navigation; reports; settings -> `npm run build` -> `dist/assets/index-DRuZpqVw.js 600.43 kB │ gzip 167.04 kB`; OCR split to `src-TAbbrvBY.js 17.24 kB │ gzip 7.29 kB`.
+- Replaced the pale stone UI with deep green, saffron and cream; Bricolage Grotesque + DM Sans; full-width outstanding band; compact rows; sheets; bottom navigation; reports; settings -> `npm run build` -> `dist/assets/index-DRuZpqVw.js 597.14 kB │ gzip 165.77 kB`; OCR split to `src-TAbbrvBY.js 17.24 kB │ gzip 7.29 kB`.
 - Browser check at 1440 px -> Playwright -> `scrollWidth 1440`, `innerWidth 1440`, `smallTargets []`, `ERRORS: []`.
 - Browser check at 375 px -> Playwright -> `scrollWidth 375`, `innerWidth 375`, `smallTargets []`, `ERRORS: []`.
 - Browser check on mobile auth first screen -> Playwright -> `emailTop 462.7`, `viewport 812`, `emailVisible true`, `scrollWidth 375`.

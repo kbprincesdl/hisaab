@@ -20,7 +20,7 @@ Payments are allocated FIFO to the oldest credits. Every credit lot gets a due d
 
 Evidence:
 
-- `npm test` -> `Test Files 1 passed (1)`, `Tests 22 passed (22)`.
+- `npm test` -> `Test Files 2 passed (2)`, `Tests 24 passed (24)`.
 - Sample ledger after the change -> `Overdue 3`, `Due soon 5`, `Overdue ₹2,520`, `Due in 7 days ₹4,770`; before the change the old app showed all 8 customers as Overdue.
 
 ### Strict import and backup: DONE
@@ -29,7 +29,7 @@ Import is now all-or-nothing. Duplicate phones, unknown entry phones, bad amount
 
 Evidence:
 
-- `npm test` -> 22 tests pass, including partial-import rejection, duplicate phone, bad amount/date, backup-envelope import and invalid credit period.
+- `npm test` -> 24 tests pass, including partial-import rejection, duplicate phone, bad amount/date, backup-envelope import and invalid credit period.
 - Browser invalid import -> `{"showsError":true,"hasCustomerAfter":true}` (the existing customer was not lost).
 - Settings after loading the sample shows a local `before-import` backup with a Restore action.
 
@@ -93,14 +93,16 @@ Two cloud configuration gaps remain on the live site:
 10. **The old row repeated “23d overdue” three times on mobile.** Removed the duplicate mobile status; the balance status and overdue label now appear once.
 11. **The first signed-in cloud attempt showed a raw `PGRST205` string.** That was the real cause: the Supabase tables had never been created. Replaced it with a setup card, exposed `/setup.sql` for one-click copying, linked the SQL editor, and made Sync now retry `ensureShop` instead of silently doing nothing when `shopId` was null.
 12. **Vercel used `NEXT_PUBLIC_*` env names, which Vite ignores by default.** Added `envPrefix: ['VITE_', 'NEXT_PUBLIC_']` and fallbacks for `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. A production build made with only the `NEXT_PUBLIC_*` variables contains the Supabase URL and publishable key, so the Vercel configuration now works without renaming.
+13. **The shop name still carried `(fictional)` and the old default.** Changed `DEFAULT_SHOP_NAME`, the sample shop, the cloud fallback, the SQL column default and the new-user trigger to **Lakshmi Provision Store**. Added `normalizeShopName` so existing IndexedDB/cloud data and old imports are upgraded on load, and refreshed the screenshots.
 
 ## Claims ledger
 
 | Claim | Proof | Status |
 | --- | --- | --- |
 | TypeScript is clean | `npm run lint` -> no output | Proven |
-| 20 ledger/import/aging tests pass | `npm test` -> `Tests 22 passed (22)` | Proven |
-| Production build succeeds | `npm run build` -> `index-DRuZpqVw.js 600.43 kB │ gzip 167.04 kB`; OCR chunk 17.24 kB | Proven |
+| 24 tests pass | `npm test` -> `Tests 24 passed (24)` | Proven |
+| Shop name is Lakshmi Provision Store | Browser body -> `Lakshmi Provision Store`; tests cover old-name migration | Proven |
+| Production build succeeds | `npm run build` -> `index-BfUSLyJe.js 600.57 kB │ gzip 167.10 kB`; OCR chunk 17.24 kB | Proven |
 | Ledger survives reload | Playwright -> `hasRavi true`, `total ₹11,820`, `mode local` | Proven |
 | Real overdue aging | Sample -> `Overdue 3`, `Due soon 5`; tests cover FIFO, due soon, advance | Proven |
 | Invalid import is rejected without data loss | Playwright -> `showsError true`, `hasCustomerAfter true` | Proven |

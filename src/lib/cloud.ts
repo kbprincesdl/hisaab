@@ -1,6 +1,6 @@
 import { Session } from '@supabase/supabase-js';
 import { ShopData } from '../types/ledger';
-import { normalizeStoredData } from '../utils/ledger';
+import { DEFAULT_SHOP_NAME, normalizeStoredData } from '../utils/ledger';
 import { supabase } from './supabase';
 
 export interface CloudShop {
@@ -74,7 +74,7 @@ export async function ensureShop(
   if (!existing.shop) {
     const { error } = await supabase.from('shops').insert({
       owner_id: userId,
-      name: fallback.shop.slice(0, 80) || 'My Kirana Store',
+      name: fallback.shop.slice(0, 80) || DEFAULT_SHOP_NAME,
       upi_id: fallback.upiId.slice(0, 120) || 'kirana@upi',
       credit_days: fallback.creditDays,
     });

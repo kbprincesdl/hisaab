@@ -29,12 +29,12 @@ The repo now installs with plain npm and commits `package-lock.json`. The old `b
 Useful commands:
 
 ```powershell
-npm test          # 20 ledger/import/aging tests
+npm test          # 24 ledger/import/aging tests
 npm run lint      # tsc --noEmit
 npm run build     # production build
 ```
 
-The sample shop is fictional and its dates are generated relative to today, so the demo always has recent activity.
+The sample data is synthetic and its dates are generated relative to today, so the demo always has recent activity. The sample and default shop name is **Lakshmi Provision Store**.
 
 ## Supabase setup (one-time)
 

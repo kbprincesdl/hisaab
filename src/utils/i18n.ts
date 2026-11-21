@@ -430,7 +430,7 @@ const EN: Translations = {
   persistentOn: 'On — the browser is less likely to evict this ledger.',
   persistentOff: 'Off — the browser may clear data when space is low.',
   requestPersistent: 'Ask browser to keep data',
-  loadSampleHint: 'Loads fictional customers and entries. Review before replacing.',
+  loadSampleHint: 'Loads sample customers and entries. Review before replacing.',
   clearSearchLabel: 'Clear search',
 
   loadingLedger: 'Opening your ledger...',
@@ -689,7 +689,7 @@ const HI: Translations = {
   persistentOn: 'चालू — ब्राउज़र इस खाते को कम हटाएगा।',
   persistentOff: 'बंद — जगह कम होने पर ब्राउज़र डेटा हटा सकता है।',
   requestPersistent: 'ब्राउज़र से डेटा रखने को कहें',
-  loadSampleHint: 'काल्पनिक ग्राहक और एंट्री लोड होंगी। बदलने से पहले देखें।',
+  loadSampleHint: 'सैंपल ग्राहक और एंट्री लोड होंगी। बदलने से पहले देखें।',
   clearSearchLabel: 'खोज साफ़ करें',
 
   loadingLedger: 'खाता खुल रहा है...',

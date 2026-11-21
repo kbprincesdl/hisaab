@@ -224,6 +224,17 @@ describe('strict import', () => {
     }
   });
 
+  it('normalizes an old sample shop name during import', () => {
+    const raw = JSON.stringify({
+      shop: 'Lakshmi Provision Store (fictional)',
+      customers: [CUSTOMER],
+      entries: [],
+    });
+    const result = parseImportJsonStrict(raw);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.data.shop).toBe('Lakshmi Provision Store');
+  });
+
   it('accepts the backup file envelope', () => {
     const raw = JSON.stringify({
       format: 'hisaab-backup',
@@ -268,8 +279,24 @@ describe('stored data repair', () => {
       entries: [],
     });
     expect(data.creditDays).toBe(30);
-    expect(data.shop).toBe('My Kirana Store');
+    expect(data.shop).toBe('Lakshmi Provision Store');
     expect(data.customers).toHaveLength(1);
+  });
+
+  it('upgrades the old sample and default shop names', () => {
+    const oldSample = normalizeStoredData({
+      shop: 'Lakshmi Provision Store (fictional)',
+      customers: [CUSTOMER],
+      entries: [],
+    });
+    expect(oldSample.shop).toBe('Lakshmi Provision Store');
+
+    const oldDefault = normalizeStoredData({
+      shop: 'My Kirana Store',
+      customers: [CUSTOMER],
+      entries: [],
+    });
+    expect(oldDefault.shop).toBe('Lakshmi Provision Store');
   });
 });
 

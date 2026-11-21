@@ -7,7 +7,7 @@ create extension if not exists pgcrypto;
 create table if not exists public.shops (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null unique references auth.users (id) on delete cascade,
-  name text not null default 'My Kirana Store' check (char_length(name) between 1 and 80),
+  name text not null default 'Lakshmi Provision Store' check (char_length(name) between 1 and 80),
   upi_id text not null default 'kirana@upi' check (char_length(upi_id) between 3 and 120),
   credit_days integer not null default 30 check (credit_days between 1 and 365),
   created_at timestamptz not null default now(),
@@ -56,7 +56,7 @@ set search_path = public
 as $$
 begin
   insert into public.shops (owner_id, name, upi_id, credit_days)
-  values (new.id, 'My Kirana Store', 'kirana@upi', 30)
+  values (new.id, 'Lakshmi Provision Store', 'kirana@upi', 30)
   on conflict (owner_id) do nothing;
   return new;
 end;
