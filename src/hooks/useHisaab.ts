@@ -28,7 +28,7 @@ import {
   signInWithMagicLink,
   signOut as signOutCloud,
 } from '../lib/cloud';
-import { isCloudConfigured, supabase } from '../lib/supabase';
+import { getAuthRedirectUrl, isCloudConfigured, supabase } from '../lib/supabase';
 
 export type SyncState = 'idle' | 'saving' | 'saved' | 'offline' | 'error' | 'conflict';
 
@@ -170,8 +170,12 @@ export function useHisaab(): HisaabStore {
         setSyncState('saved');
         setCloudError(null);
       } else {
-        setSyncState('conflict');
-        setCloudError('Another device saved first. Your ledger was merged; use Sync to retry.');
+        setSyncState('error');
+        setCloudError(
+          retry.error ??
+            saved.error ??
+            'Another device saved first and the retry failed. Your ledger is still on this phone.'
+        );
       }
     } else {
       setSyncState('error');
@@ -224,8 +228,11 @@ export function useHisaab(): HisaabStore {
         setLastSavedAt(Date.now());
         return;
       }
-      setSyncState('conflict');
-      setCloudError('Another device saved first. Your ledger was merged; use Sync to retry.');
+      setSyncState('error');
+      setCloudError(
+        result.error ??
+          'Another device saved first and the retry failed. Your ledger is still on this phone.'
+      );
       return;
     }
 
@@ -363,7 +370,7 @@ export function useHisaab(): HisaabStore {
       setAuthError(error);
       return { ok: false, error };
     }
-    const result = await signInWithMagicLink(email, window.location.origin);
+    const result = await signInWithMagicLink(email, getAuthRedirectUrl());
     setAuthBusy(false);
     if (!result.ok) {
       setAuthError(result.error ?? 'Could not send the sign-in link.');

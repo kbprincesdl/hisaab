@@ -74,3 +74,5 @@ Each line records a proven slice. Commands were run in `C:\Prince\FWAI\hisaab`.
 - A bulk PowerShell rewrite double-encoded `₹` and Hindi text in `ledger.ts` -> repaired with a Node UTF-8 read/write; a scan for `Â`, `Ã`, `à¤`, `â‚¹` now returns no files.
 - The first mobile auth screen pushed the email field below the fold -> hid the repeated subtitle/feature list on phone -> `emailTop 462.7 < 812`.
 - The old “Overdue” tab was only `balance > 0` -> replaced with FIFO aging and a real overdue amount -> sample now shows `Overdue 3`.
+
+- Added an explicit `VITE_AUTH_REDIRECT_URL` and surfaced the real conflict-retry error -> `npm test` -> 24 passed; `npm run build` -> 600.76 kB | gzip 167.12 kB. Supabase Auth Site URL/Redirect URLs still need the dashboard change; the tables now exist (`shops`/`ledger_snapshots` return 401 to anon, which is expected under RLS).

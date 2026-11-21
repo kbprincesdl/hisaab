@@ -11,6 +11,16 @@ const publishableKey =
 
 export const isCloudConfigured = Boolean(url && publishableKey);
 
+export function getAuthRedirectUrl(): string {
+  const configured =
+    (import.meta.env.VITE_AUTH_REDIRECT_URL as string | undefined) ??
+    (import.meta.env.NEXT_PUBLIC_AUTH_REDIRECT_URL as string | undefined);
+  if (configured && /^https?:\/\//i.test(configured)) return configured;
+  return typeof window !== 'undefined'
+    ? window.location.origin
+    : 'https://hisaab-indol.vercel.app';
+}
+
 export function getSupabaseSqlEditorUrl(): string | null {
   if (!url) return null;
   try {

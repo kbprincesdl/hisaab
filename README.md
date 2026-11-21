@@ -44,8 +44,9 @@ The app is safe to run without cloud; it asks whether to use the phone only or s
 2. In **Authentication → URL Configuration**, set:
    - **Site URL**: `https://hisaab-indol.vercel.app`
    - **Redirect URLs**: `https://hisaab-indol.vercel.app` and `http://localhost:3000`
+   - Set `VITE_AUTH_REDIRECT_URL` to `https://hisaab-indol.vercel.app` in Vercel and `.env.local`; this is the URL the magic link returns to.
 3. Email is the enabled auth provider in this project. A production shop should connect custom SMTP in Supabase so magic-link delivery is reliable.
-4. Put the publishable key and project URL in `.env.local` and in Vercel's environment variables. This build accepts both names: `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`, or `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Never put a service-role key or database password in a `VITE_` or `NEXT_PUBLIC_` variable: both are published to the browser.
+4. Put the publishable key and project URL in `.env.local` and in Vercel's environment variables. This build accepts both names: `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`, or `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Never put a service-role key or database password in a `VITE_` or `NEXT_PUBLIC_` variable: both are published to the browser. Also set `VITE_AUTH_REDIRECT_URL` to `https://hisaab-indol.vercel.app` in Vercel and `.env.local`; it must be listed in Supabase Redirect URLs.
 
 The publishable key is safe in the browser only because every table has RLS. If the SQL migration has not been run, signing in shows a clear cloud error; local mode keeps working.
 
@@ -58,7 +59,7 @@ The publishable key is safe in the browser only because every table has RLS. If 
 
 ## Known limits
 
-- Cloud sync is implemented but could not be exercised end-to-end until the SQL migration is run in the Supabase project.
-- The live Vercel build is updated and now reads the Supabase environment variables (the “Cloud backup is not configured” warning is gone). The Supabase SQL migration is still required before sign-in can create a shop.
+- The Supabase `shops` and `ledger_snapshots` tables now exist. The remaining cloud sync issue is being diagnosed; the app now shows the actual cloud error in Settings.
+- The live Vercel build reads the Supabase env vars. Magic-link emails still return to localhost until **Authentication → URL Configuration → Site URL** is set to `https://hisaab-indol.vercel.app` and both live and localhost are in **Redirect URLs**.
 - The main JS bundle is about 166 KB gzipped and the build warns about the 500 KB chunk. Splitting Supabase and the reports/settings views is the next performance step.
 - Hindi mode still shows English month abbreviations in dates (`29 Oct 2026`); amounts use Indian grouping and ₹.

@@ -3,6 +3,12 @@
 Project: `C:\Prince\FWAI\hisaab` (public repo `kbprincesdl/hisaab`).
 Built on 2026-11-21. Local app: `http://localhost:3000`.
 
+## Post-deploy update (2026-11-21)
+
+- The Supabase `shops` and `ledger_snapshots` tables now exist. An anon query returns `401 permission denied`, which is expected under RLS; `customers`/`entries` 404s are expected because this app stores one JSON snapshot, not those relational tables.
+- Magic links still return to localhost until Supabase **Authentication → URL Configuration → Site URL** is set to `https://hisaab-indol.vercel.app` and the live + localhost URLs are added to **Redirect URLs**. The app now sends `VITE_AUTH_REDIRECT_URL`.
+- The signed-in local session shows a sync conflict; the app now displays the actual cloud error in Settings. Re-run the updated SQL and retry **Sync now**.
+
 ## Status per part
 
 ### Local-first storage: DONE
@@ -103,7 +109,7 @@ One cloud configuration gap remains:
 | TypeScript is clean | `npm run lint` -> no output | Proven |
 | 24 tests pass | `npm test` -> `Tests 24 passed (24)` | Proven |
 | Shop name is Lakshmi Provision Store | Browser body -> `Lakshmi Provision Store`; tests cover old-name migration | Proven |
-| Production build succeeds | `npm run build` -> `index-BfUSLyJe.js 600.57 kB │ gzip 167.10 kB`; OCR chunk 17.24 kB | Proven |
+| Production build succeeds | `npm run build` -> `index-V6Zk6eQK.js 600.76 kB │ gzip 167.12 kB`; OCR chunk 17.24 kB | Proven |
 | Ledger survives reload | Playwright -> `hasRavi true`, `total ₹11,820`, `mode local` | Proven |
 | Real overdue aging | Sample -> `Overdue 3`, `Due soon 5`; tests cover FIFO, due soon, advance | Proven |
 | Invalid import is rejected without data loss | Playwright -> `showsError true`, `hasCustomerAfter true` | Proven |
@@ -114,7 +120,7 @@ One cloud configuration gap remains:
 | Touch targets are 44 px or taller | Playwright -> `smallTargets []` on ledger and settings | Proven |
 | Contrast passes AA for measured pairs | Node WCAG calculation; list in `WORKLOG.md` | Proven for listed pairs |
 | Supabase auth service is reachable | `GET /auth/v1/settings` -> 200, email true | Proven |
-| Supabase tables exist | `GET /rest/v1/shops` -> 404 `PGRST205` | **Failed / blocked** |
+| Supabase tables exist | anon query -> `401 permission denied`; the table exists under RLS | Proven |
 | Missing-table errors are detected | `cloud.test.ts` -> `isCloudSetupError('PGRST205')` true | Proven |
 | Email magic link works end-to-end | Not sent; no inbox, no redirect URL configured | **UNVERIFIED** |
 | Cloud snapshot save/merge works end-to-end | Code compiles; tables missing; no sign-in test | **UNVERIFIED** |
@@ -122,6 +128,7 @@ One cloud configuration gap remains:
 | WhatsApp reminder is delivered | Click-to-chat opens the WhatsApp URL; delivery cannot be confirmed | **UNVERIFIED delivery** |
 | GitHub commit and push | `git log` -> `d039a40 feat: add local-first ledger, cloud backup and redesigned UI`; `git push` -> `b161f1e..d039a40 main -> main` | Proven |
 | Live Vercel site is updated | Live fetch -> `200`; Playwright -> new welcome screen, no console errors; live CSS `index-BD3wcTni.css` matches the build | Proven |
+| Live auth redirect configured | Code sends `VITE_AUTH_REDIRECT_URL`; Supabase Site URL still needs to be changed in the dashboard | **Not done** |
 | Live shop name is Lakshmi Provision Store | Live Playwright -> `hasOldName false`, `hasNewName true`, body starts `Hisaab / Lakshmi Provision Store` | Proven |
 | Vercel cloud env is configured | Live Playwright -> `cloudNotConfigured: false` | Proven |
 
