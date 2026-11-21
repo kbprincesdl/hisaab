@@ -1,4 +1,4 @@
-import { createWorker } from 'tesseract.js';
+
 
 function loadImageElement(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -108,6 +108,7 @@ export async function extractAmountFromImage(file: File): Promise<{ amount: numb
   const img = await loadImageElement(dataUrl);
   const canvas = buildOcrCanvas(img);
 
+  const { createWorker } = await import('tesseract.js');
   const worker = await createWorker('eng', 1, {
     workerPath: '/tesseract/worker.min.js',
     corePath: '/tesseract',

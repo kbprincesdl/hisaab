@@ -1,21 +1,76 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Plus Jakarta Sans", "Noto Sans Devanagari", system-ui, -apple-system, sans-serif;
-  --font-sans: "DM Sans", "Noto Sans Devanagari", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Bricolage Grotesque", "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-sans: "DM Sans", "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-mono: "DM Sans", "Noto Sans Devanagari", system-ui, sans-serif;
+
+  --color-cream: #fbf6ea;
+  --color-cream-deep: #f3ead7;
+  --color-ink: #14231d;
+  --color-ink-muted: #5c6b63;
+  --color-line: #e4dccb;
+  --color-hisaab: #0b3d2e;
+  --color-hisaab-deep: #072a20;
+  --color-saffron: #e8751a;
+  --color-saffron-ink: #a34a00;
+  --color-saffron-soft: #fbe3cc;
+  --color-gold: #f2b544;
+  --color-overdue: #b42318;
+  --color-overdue-soft: #fde8e4;
+  --color-due: #9a5b00;
+  --color-due-soft: #fff1d6;
+  --color-settled: #0f7a55;
+  --color-settled-soft: #dff3ea;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
-    background-color: #f7f6f2;
-    color: #18181b;
+    background-color: var(--color-cream);
+    color: var(--color-ink);
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
   }
 
-  h1, h2, h3, .font-display {
+  body {
+    min-height: 100vh;
+    background-color: var(--color-cream);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-saffron);
+    outline-offset: 2px;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
 }
 
@@ -23,8 +78,57 @@
   font-variant-numeric: tabular-nums;
 }
 
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.2s ease-out both;
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sheet-up {
+  animation: sheet-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

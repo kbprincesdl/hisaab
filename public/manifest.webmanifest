@@ -1,0 +1,17 @@
+{
+  "name": "Hisaab — Kirana Digital Ledger",
+  "short_name": "Hisaab",
+  "description": "A calm, cloud-backed kirana credit ledger with real overdue aging and WhatsApp reminders.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF6EA",
+  "theme_color": "#0B3D2E",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
