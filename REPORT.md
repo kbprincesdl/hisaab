@@ -92,6 +92,7 @@ Two cloud configuration gaps remain on the live site:
 9. **A bulk PowerShell rewrite double-encoded `₹` and Hindi text in `ledger.ts`.** Repaired the file with a Node UTF-8 read/write and verified with a scan for `Â`, `Ã`, `à¤`, `â‚¹` (no matches).
 10. **The old row repeated “23d overdue” three times on mobile.** Removed the duplicate mobile status; the balance status and overdue label now appear once.
 11. **The first signed-in cloud attempt showed a raw `PGRST205` string.** That was the real cause: the Supabase tables had never been created. Replaced it with a setup card, exposed `/setup.sql` for one-click copying, linked the SQL editor, and made Sync now retry `ensureShop` instead of silently doing nothing when `shopId` was null.
+12. **Vercel used `NEXT_PUBLIC_*` env names, which Vite ignores by default.** Added `envPrefix: ['VITE_', 'NEXT_PUBLIC_']` and fallbacks for `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. A production build made with only the `NEXT_PUBLIC_*` variables contains the Supabase URL and publishable key, so the Vercel configuration now works without renaming.
 
 ## Claims ledger
 

@@ -6,6 +6,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // Vite only exposes prefixed env vars. Accept the Vercel/Next-style
+    // names too, so either dashboard configuration works.
+    envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     plugins: [
       react(),
       tailwindcss(),

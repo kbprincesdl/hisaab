@@ -45,7 +45,7 @@ The app is safe to run without cloud; it asks whether to use the phone only or s
    - **Site URL**: `https://hisaab-indol.vercel.app`
    - **Redirect URLs**: `https://hisaab-indol.vercel.app` and `http://localhost:3000`
 3. Email is the enabled auth provider in this project. A production shop should connect custom SMTP in Supabase so magic-link delivery is reliable.
-4. Put the publishable key and project URL in `.env.local` and in Vercel's environment variables. Never put a service-role key or database password in a `VITE_` variable: Vite publishes those values to the browser.
+4. Put the publishable key and project URL in `.env.local` and in Vercel's environment variables. This build accepts both names: `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`, or `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Never put a service-role key or database password in a `VITE_` or `NEXT_PUBLIC_` variable: both are published to the browser.
 
 The publishable key is safe in the browser only because every table has RLS. If the SQL migration has not been run, signing in shows a clear cloud error; local mode keeps working.
 
