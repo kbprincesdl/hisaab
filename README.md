@@ -59,6 +59,6 @@ The publishable key is safe in the browser only because every table has RLS. If 
 ## Known limits
 
 - Cloud sync is implemented but could not be exercised end-to-end until the SQL migration is run in the Supabase project.
-- The live Vercel build is updated to commit `d039a40`, but it still says **“Cloud backup is not configured for this build”** until `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are added in Vercel and it is redeployed. The Supabase SQL migration is also still required.
+- The live Vercel build is updated and now reads the Supabase environment variables (the “Cloud backup is not configured” warning is gone). The Supabase SQL migration is still required before sign-in can create a shop.
 - The main JS bundle is about 166 KB gzipped and the build warns about the 500 KB chunk. Splitting Supabase and the reports/settings views is the next performance step.
 - Hindi mode still shows English month abbreviations in dates (`29 Oct 2026`); amounts use Indian grouping and ₹.

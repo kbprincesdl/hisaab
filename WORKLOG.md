@@ -33,6 +33,7 @@ Each line records a proven slice. Commands were run in `C:\Prince\FWAI\hisaab`.
 - Made the build accept Vercel/Next env names -> temporarily replaced `.env.local` with only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, ran `npm run build` -> `URL_IN_BUNDLE: True`, `KEY_PREFIX_IN_BUNDLE: True`; restored `.env.local` and rebuilt -> 600.57 kB; `npm run lint` clean, `npm test` 24 passed.
 - Pushed the env alias and rechecked live -> `git push` -> `a12bd77..fdb8b90 main -> main`; live Playwright after 40s -> `cloudNotConfigured: true`, so the Vercel Production env vars are still absent; the app itself has no console errors and the new UI is live.
 - Renamed the shop to `Lakshmi Provision Store` everywhere in the sample/defaults, cloud fallback, SQL default/trigger and screenshots; added a legacy migration that strips `(fictional)` and maps old `My Kirana Store`/`Hisaab Store` defaults -> `npm test` -> `Tests 24 passed (24)`; browser body -> `Lakshmi Provision Store` with no suffix; `npm run build` -> 600.57 kB | gzip 167.10 kB.
+- Rechecked the live site after the name/env deploys -> Playwright -> `cloudNotConfigured: false`, `hasOldName: false`, `hasNewName: true`, `ERRORS: []`; `GET /rest/v1/shops` still `404 PGRST205` because the SQL migration has not been run.
 - Cloud end-to-end verification is blocked until the SQL migration is run in the Supabase project; see `REPORT.md`. The setup card itself is unit-tested for `PGRST205` detection but was not visually exercised inside the user's signed-in browser session.
 
 ## Redesign
