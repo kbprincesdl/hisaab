@@ -31,6 +31,7 @@ Each line records a proven slice. Commands were run in `C:\Prince\FWAI\hisaab`.
 - Committed and pushed the work -> `git commit -c user.name=...` -> `[main d039a40] feat: add local-first ledger, cloud backup and redesigned UI`, `46 files changed, 11294 insertions(+), 1621 deletions(-)`; `git push origin main` -> `b161f1e..d039a40 main -> main`.
 - Vercel auto-deployed after the push -> fetch `https://hisaab-indol.vercel.app/` -> `200`, new welcome screen, no console errors; live CSS `index-BD3wcTni.css` matches the build; live body also reports `Cloud backup is not configured for this build` because Vercel has no Supabase env vars; `/setup.sql` -> `200`, 5664 chars.
 - Made the build accept Vercel/Next env names -> temporarily replaced `.env.local` with only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, ran `npm run build` -> `URL_IN_BUNDLE: True`, `KEY_PREFIX_IN_BUNDLE: True`; restored `.env.local` and rebuilt -> 600.43 kB; `npm run lint` clean, `npm test` 22 passed.
+- Pushed the env alias and rechecked live -> `git push` -> `a12bd77..fdb8b90 main -> main`; live Playwright after 40s -> `cloudNotConfigured: true`, so the Vercel Production env vars are still absent; the app itself has no console errors and the new UI is live.
 - Cloud end-to-end verification is blocked until the SQL migration is run in the Supabase project; see `REPORT.md`. The setup card itself is unit-tested for `PGRST205` detection but was not visually exercised inside the user's signed-in browser session.
 
 ## Redesign

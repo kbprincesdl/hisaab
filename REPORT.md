@@ -72,11 +72,11 @@ Supporting facts:
 
 ### GitHub commit and Vercel deployment: DONE
 
-Commit `d039a40` was created on `main` and pushed to `https://github.com/kbprincesdl/hisaab`. Vercel auto-deployed; `https://hisaab-indol.vercel.app/` returned `200` and rendered the new welcome screen with no console errors. The live CSS asset is `index-BD3wcTni.css`, matching the local build.
+Commits `d039a40` (app), `a12bd77` (docs) and `fdb8b90` (Vercel/Next env alias) are on `main` and pushed to `https://github.com/kbprincesdl/hisaab`. Vercel auto-deployed; `https://hisaab-indol.vercel.app/` returned `200` and rendered the new welcome screen with no console errors. The live CSS asset is `index-BD3wcTni.css`, matching the local build.
 
 Two cloud configuration gaps remain on the live site:
 
-- Vercel has no `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`, so the live build says **“Cloud backup is not configured for this build.”** Local mode works.
+- Vercel Production has no Supabase environment variables (neither `VITE_*` nor `NEXT_PUBLIC_*`), so the live build still says **“Cloud backup is not configured for this build.”** Local mode works.
 - The Supabase tables are still missing (`GET /rest/v1/shops` -> `404 PGRST205`). The migration has not been run yet.
 
 ## What broke and how I fixed it
@@ -130,5 +130,5 @@ Two cloud configuration gaps remain on the live site:
 5. Receipt images are compressed data URLs inside the snapshot. The app caps one receipt at 2.5 MB and all import receipts at 8 MB. At real shop scale, move them to Supabase Storage and store paths in entries.
 6. WhatsApp reminders are click-to-chat. The app records that the reminder was opened, not that it was delivered or read.
 7. The sample shop dates are generated relative to today, so the demo stays current. Do not use the sample as real shop data.
-8. Commit `d039a40` is live. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel Project Settings → Environment Variables and redeploy; the live build currently reports cloud not configured. Run the SQL migration and press **Sync now** to enable cloud. The repo is now npm/`package-lock.json` based; the stale `bun.lock` was removed so Vercel installs the new dependencies.
+8. Commits through `fdb8b90` are live. Add either `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in Vercel Project Settings → Environment Variables (Production, Preview and Development) and redeploy; Vite inlines env values at build time, so saving them is not enough. The live build currently reports cloud not configured. Run the SQL migration and press **Sync now** to enable cloud. The repo is now npm/`package-lock.json` based; the stale `bun.lock` was removed so Vercel installs the new dependencies.
 9. Use a Node UTF-8 read/write for bulk file edits on this machine. A PowerShell `Get-Content | Set-Content` pass corrupted `₹` and Hindi text once.
