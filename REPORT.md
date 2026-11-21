@@ -70,9 +70,14 @@ Supporting facts:
 - `GET /rest/v1/` -> `401 {"message":"Secret API key required","hint":"Only secret API keys can be used for this endpoint."}`.
 - The migration is at `supabase/migrations/0001_init.sql`.
 
-### Deployment: NOT DONE
+### GitHub commit and Vercel deployment: DONE
 
-The live site `https://hisaab-indol.vercel.app/` was not updated. No commit, push or deploy was performed because the user did not ask for one. The reviewed app runs locally at `http://localhost:3000`.
+Commit `d039a40` was created on `main` and pushed to `https://github.com/kbprincesdl/hisaab`. Vercel auto-deployed; `https://hisaab-indol.vercel.app/` returned `200` and rendered the new welcome screen with no console errors. The live CSS asset is `index-BD3wcTni.css`, matching the local build.
+
+Two cloud configuration gaps remain on the live site:
+
+- Vercel has no `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`, so the live build says **“Cloud backup is not configured for this build.”** Local mode works.
+- The Supabase tables are still missing (`GET /rest/v1/shops` -> `404 PGRST205`). The migration has not been run yet.
 
 ## What broke and how I fixed it
 
@@ -111,7 +116,9 @@ The live site `https://hisaab-indol.vercel.app/` was not updated. No commit, pus
 | Cloud snapshot save/merge works end-to-end | Code compiles; tables missing; no sign-in test | **UNVERIFIED** |
 | Payment screenshot OCR works | Code path preserved and dynamically imported; no image upload in this run | **UNVERIFIED** |
 | WhatsApp reminder is delivered | Click-to-chat opens the WhatsApp URL; delivery cannot be confirmed | **UNVERIFIED delivery** |
-| Live Vercel site is updated | No commit/push/deploy was performed; live URL still the old build | **Not done** |
+| GitHub commit and push | `git log` -> `d039a40 feat: add local-first ledger, cloud backup and redesigned UI`; `git push` -> `b161f1e..d039a40 main -> main` | Proven |
+| Live Vercel site is updated | Live fetch -> `200`; Playwright -> new welcome screen, no console errors; live CSS `index-BD3wcTni.css` matches the build | Proven |
+| Vercel cloud env is configured | Live body -> `Cloud backup is not configured for this build` | **Not done** |
 
 ## What I would tell the next person
 
@@ -122,5 +129,5 @@ The live site `https://hisaab-indol.vercel.app/` was not updated. No commit, pus
 5. Receipt images are compressed data URLs inside the snapshot. The app caps one receipt at 2.5 MB and all import receipts at 8 MB. At real shop scale, move them to Supabase Storage and store paths in entries.
 6. WhatsApp reminders are click-to-chat. The app records that the reminder was opened, not that it was delivered or read.
 7. The sample shop dates are generated relative to today, so the demo stays current. Do not use the sample as real shop data.
-8. The repo is now npm/`package-lock.json` based. The stale `bun.lock` was removed so Vercel installs the new Supabase and IndexedDB dependencies instead of an old frozen bun lock. The live site has not been updated yet; open `http://localhost:3000` to review the worktree.
+8. Commit `d039a40` is live. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel Project Settings → Environment Variables and redeploy; the live build currently reports cloud not configured. Run the SQL migration and press **Sync now** to enable cloud. The repo is now npm/`package-lock.json` based; the stale `bun.lock` was removed so Vercel installs the new dependencies.
 9. Use a Node UTF-8 read/write for bulk file edits on this machine. A PowerShell `Get-Content | Set-Content` pass corrupted `₹` and Hindi text once.
